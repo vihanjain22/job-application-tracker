@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Application - Job Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>➕ Add New Application</h1>
+            <a href="/" class="btn-secondary">← Back to Dashboard</a>
+        </header>
+
+        <form method="POST" action="/add" class="add-form">
+            <div class="form-group">
+                <label for="company">Company Name *</label>
+                <input type="text" id="company" name="company" required 
+                       placeholder="e.g., Google, Microsoft">
+            </div>
+
+            <div class="form-group">
+                <label for="position">Position *</label>
+                <input type="text" id="position" name="position" required 
+                       placeholder="e.g., Software Engineer">
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" 
+                       placeholder="e.g., San Francisco, Remote">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="date_applied">Date Applied *</label>
+                    <input type="date" id="date_applied" name="date_applied" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="deadline">Follow-up Deadline</label>
+                    <input type="date" id="deadline" name="deadline">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="job_url">Job Posting URL</label>
+                <input type="url" id="job_url" name="job_url" 
+                       placeholder="https://...">
+            </div>
+
+            <div class="form-group">
+                <label for="salary_range">Salary Range</label>
+                <input type="text" id="salary_range" name="salary_range" 
+                       placeholder="e.g., $80k - $120k">
+            </div>
+
+            <div class="form-group">
+                <label for="notes">Notes</label>
+                <textarea id="notes" name="notes" rows="4" 
+                          placeholder="Referral contact, interview feedback, etc."></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary">Add Application</button>
+        </form>
+    </div>
+</body>
+</html>

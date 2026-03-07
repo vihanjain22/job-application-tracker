@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analytics - Job Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Analytics Dashboard</h1>
+            <a href="/" class="btn-secondary">← Back to Dashboard</a>
+        </header>
+
+        <div class="stats-bar">
+            <div class="stat-box">
+                <div class="stat-number" id="totalApps">-</div>
+                <div class="stat-label">Total Applications</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="totalResponses">-</div>
+                <div class="stat-label">Responses Received</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="responseRate">-</div>
+                <div class="stat-label">Response Rate</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h3>Application Status Breakdown</h3>
+                <canvas id="statusChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3>Applications Over Time</h3>
+                <canvas id="timelineChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fetch and display statistics
+        fetch('/api/analytics/stats')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('totalApps').textContent = data.total;
+                document.getElementById('totalResponses').textContent = data.responses;
+                document.getElementById('responseRate').textContent = data.response_rate + '%';
+            });
+
+        // Status breakdown pie chart
+        fetch('/api/analytics/status')
+            .then(res => res.json())
+            .then(data => {
+                const ctx = document.getElementById('statusChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            data: data.values,
+                            backgroundColor: [
+                                '#3498db', // Applied
+                                '#f39c12', // Interviewing
+                                '#27ae60', // Offer
+                                '#e74c3c', // Rejected
+                                '#95a5a6'  // Ghosted
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true
+                    }
+                });
+            });
+
+        // Timeline line chart
+        fetch('/api/analytics/timeline')
+            .then(res => res.json())
+            .then(data => {
+                const ctx = document.getElementById('timelineChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.dates,
+                        datasets: [{
+                            label: 'Applications',
+                            data: data.counts,
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+    </script>
+</body>
+</html>
